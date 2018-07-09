@@ -41,7 +41,7 @@
         p.then(function (arr) {
             alert('success' + arr);
         }, function (err) {
-             console.log(err);
+            console.log(err);
             alert('error' + err);
         });
     </script>
@@ -90,7 +90,7 @@
             .then(function (arr) {
                 let [res1, res2] = arr;
                 alert("全部成功！");
-                  console.log(res1,res2); 
+                console.log(res1,res2); 
             }, function () {
                 alert("至少有一个失败了！");
             });
