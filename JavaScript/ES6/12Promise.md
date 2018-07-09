@@ -90,8 +90,7 @@
             .then(function (arr) {
                 let [res1, res2] = arr;
                 alert("全部成功！");
-                alert(res1);
-                alert(res2);
+                  console.log(res1,res2); 
             }, function () {
                 alert("至少有一个失败了！");
             });
@@ -109,6 +108,16 @@
 ```
 
 ### 实例3
+
+#有了promise之后的异步#
+```javascript
+ Promise.all([$.ajax(),$.ajax()]).then(results => {
+            alert('获取成功！');        
+        }, err => {
+            alert('失败了！');
+        });
+```
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -131,10 +140,59 @@
             })
         ]).then(function (results) {
             let [arr, json] = results;
-            alert('获取成功！');
+            console.log(arr,json); 
         }, function () {
             alert('失败了！');
         });
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
+```
+
+## 2. promise.race
+```javascript
+ Promise.race([
+     $.ajax(),
+     $.ajax(),
+     $.ajax(),
+     $.ajax()
+     ]);
+```
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script>
+        Promise.all([
+            $.ajax({
+                url: 'data/array.txt'
+            }),
+            $.ajax({
+                url: 'data/json.txt'
+            }),
+            $.ajax({
+                url: 'data/num.txt'
+            })
+        ]).then(result => {
+                let [arr, json, num] = result;
+                alert('成功！');
+                console.log(arr, json, num);
+            },
+            err => {
+                alert('失败！');
+            }
+        );
     </script>
 </head>
 
