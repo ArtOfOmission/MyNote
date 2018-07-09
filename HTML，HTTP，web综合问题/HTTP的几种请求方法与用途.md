@@ -15,11 +15,11 @@
 ## 5. DELETE方法
 删除服务器上的某资源
 
-## OPTION方法
+## 6. OPTION方法
 它用于获取当前URL所支持的方法。如果请求成功，会有一个Allow的头包含类似“GET,POST”这样的信息
 
-## TRACE方法
+## 7. TRACE方法
 TRACE方法被用于激发一个远程的，应用层的请求消息回路
 
-## CONNECT方法
+## 8. CONNECT方法
 把请求连接转换到透明的TCP/IP通道
