@@ -166,3 +166,314 @@ Vue 会尽可能高效地渲染元素，通常会复用已有元素而不是从�
 
 >一般来说，v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，则使用 v-if 较好。
 
+---
+
+# <font color=#42b983>1.2 列表渲染</font>
+
+## <font color=#42b983># v-for</font>
+
+我们可以用 v-for 指令基于一个数组来渲染一个列表。v-for 指令需要使用 item in items 形式的特殊语法，其中 items 是源数据数组，而 item 则是被迭代的数组元素的别名。
+
+### 迭代整数
+
+```html
+<div id="app">
+  <ul>
+    <li v-for="n in 10">
+     {{ n }}
+    </li>
+  </ul>
+</div>
+```
+
+### 迭代列表
+
+```html
+<ul id="app">
+  <li v-for="item in items">
+    {{ item.message }}
+  </li>
+</ul>
+```
+
+> v-for 还支持一个可选的第二个参数，即当前项的索引。
+
+```html
+<ul id="app">
+  <li v-for="(item, index) in items">
+    {{ index }} - {{ item.message }}
+  </li>
+</ul>
+```
+
+```javascript
+var example1 = new Vue({
+  el: '#example-1',
+  data: {
+    items: [
+      { message: 'Foo' },
+      { message: 'Bar' }
+    ]
+  }
+})
+```
+
+> 也可以用 of 替代 in 作为分隔符，因为它更接近 JavaScript 迭代器的语法：
+
+```html
+<div v-for="item of items"></div>
+```
+
+### 迭代对象
+
+```html
+<ul id="v-for-object" >
+  <li v-for="value in object">
+    {{ value }}
+  </li>
+</ul>
+```
+
+> 也可以提供第二个的参数为 property 名称 (也就是键名)： 
+
+```html
+<div v-for="(value, name) in object">
+  {{ name }}: {{ value }}
+</div>
+```
+
+> 还可以用第三个参数作为索引：
+
+```html
+<div v-for="(value, name, index) in object">
+  {{ index }}. {{ name }}: {{ value }}
+</div>
+```
+
+```javascript
+new Vue({
+  el: '#v-for-object',
+  data: {
+    object: {
+      title: 'How to do lists in Vue',
+      author: 'cys',
+      published: '2019-08-06'
+    }
+  }
+})
+```
+
+### 过滤与排序
+
+有时，我们想要显示一个数组经过过滤或排序后的版本，而不实际改变或重置原始数据。在这种情况下，可以创建一个计算属性，来返回过滤或排序后的数组。
+
+```html
+<div id="app">
+    <ul>
+        <li v-for="(item,index) in sortItems">
+            {{item}}：{{index}}
+        </li>
+    </ul>
+</div>
+```
+
+```javascript
+var app1 = new Vue({
+            el: "#app",
+            data: {
+                items: [123, 443, 223, 12, 32, 23, 12],
+                books: [{
+                        name: "唱片奇迹行",
+                        price: 48.00
+                    },
+                    {
+                        name: "大话数据结构",
+                        price: 36.00
+                    },
+                    {
+                        name: "寻找幸福",
+                        price: 57.00
+                    },
+                ],
+            },
+            computed: {
+                sortItems: function () {
+                    //console.log('pass');
+                    //return this.items.sort(sortNumber); //sortNumber-正序，sortNumberDesc-倒序
+                    return this.items.concat().sort(sortNumber); //sortNumber-正序，sortNumberDesc-倒序
+
+                    //过滤
+                    //return this.items.filter(function (number) {
+                      //return number % 2 === 0
+                    //});
+
+                },
+                sortBooks: function () {
+                    return sortArrObjectsByKey(this.books.concat(),"price");
+                }
+
+            },
+            methods: {
+                sortItems2: function () {
+                    //console.log('pass2'); 
+                    //concat() 先创建当前数组一个副本，然后将接收到的参数添加到这个副本的末尾，最后返回新构建的数组
+                    //return this.items.sort(sortNumberDesc);//sortNumber-正序，sortNumberDesc-倒序
+                    return this.items.concat().sort(sortNumberDesc);
+                },
+            },
+        });
+
+```
+
+```javascript
+
+//数组排序方法
+function sortNumber(a, b) {
+    return a - b;
+}
+//数组排序方法（倒序）
+function sortNumberDesc(a, b) {
+    return b - a;
+}
+
+//数组对象排序方法
+function sortArrObjectsByKey(array, key) {
+    return array.sort(function(a, b) {
+        let x = a[key];
+        let y = b[key];
+        return (x < y) ? -1 : ((x > y) ? 1 : 0);
+    }) ;
+}
+```
+
+### 在 ```<template>``` 上使用 v-for
+
+类似于 v-if，你也可以利用带有 v-for 的 ```<template>```来循环渲染一段包含多个元素的内容。比如：
+
+```javascript
+<ul>
+  <template v-for="item in items">
+    <li>{{ item.msg }}</li>
+    <li class="divider" role="presentation"></li>
+  </template>
+</ul>
+```
+
+# <font color = #42b983> 1.3 事件处理</font>
+
+
+可以用 v-on 指令监听 DOM 事件，并在触发时运行一些 JavaScript 代码。
+
+## 监听事件
+
+```html
+<div id="app">
+    <span v-text="point"></span>
+    <button v-on:click="point++" class="btn_confirm">加分</button>
+    <button v-on:click="point--" class="btn_confirm">减分</button>
+</div>
+```
+
+## 监听事件处理方法
+
+```html
+<div id="app">
+    <span v-text="point"></span>
+    <button v-on:click="ExtraPoints" class="btn_confirm">加分</button>
+    <button v-on:click="DeductionOfPoint" class="btn_confirm">减分</button>
+    <input type="text" v-on:keyup.enter="onEnter" v-model="second_point"
+    onkeyup="value=value.replace(/[^\d]/g,'')"
+    onblur="value=value.replace(/[^\d]/g,'')">
+
+</div>
+```
+
+## 在内联 JavaScript 语句中调用方法
+
+```html
+<div id="app">
+  <button v-on:click="say('hi')">Say hi</button>
+  <button v-on:click="say('what')">Say what</button>
+</div>
+```
+
+## 访问原始的 DOM 事件
+
+```html
+<button v-on:click="warn('Form cannot be submitted yet.', $event)">
+  Submit
+</button>
+
+```
+
+```javascript
+var app = new Vue({
+    el: "#app",
+    data: {
+        point: 0
+    },
+    methods: {
+        ExtraPoints: function () {
+            this.point++;
+        },
+        DeductionOfPoint: function () {
+            this.point--;
+        },
+        onEnter: function () {
+            if (this.second_point == "" || !this.second_point) return;
+            this.point += parseInt(this.second_point);
+        },
+        say: function (message) {
+          alert(message)
+        },
+        warn: function (message, event) {
+          // 现在我们可以访问原生事件对象
+          if (event) event.preventDefault()
+          alert(message)
+        }
+    }
+});
+```
+
+## 事件修饰符
+
+在事件处理程序中调用 event.preventDefault() 或 event.stopPropagation() 是非常常见的需求。尽管我们可以在方法中轻松实现这点，但更好的方式是：方法只有纯粹的数据逻辑，而不是去处理 DOM 事件细节。
+
+为了解决这个问题，Vue.js 为 v-on 提供了事件修饰符。之前提过，修饰符是由点开头的指令后缀来表示的。
+
+- .stop
+- .prevent
+- .capture
+- .self
+- .once
+- .passive
+
+```html
+<!-- 阻止单击事件继续传播 -->
+<a v-on:click.stop="doThis"></a>
+
+<!-- 提交事件不再重载页面 -->
+<form v-on:submit.prevent="onSubmit"></form>
+
+<!-- 修饰符可以串联 -->
+<a v-on:click.stop.prevent="doThat"></a>
+
+<!-- 只有修饰符 -->
+<form v-on:submit.prevent></form>
+
+<!-- 添加事件监听器时使用事件捕获模式 -->
+<!-- 即元素自身触发的事件先在此处理，然后才交由内部元素进行处理 -->
+<div v-on:click.capture="doThis">...</div>
+
+<!-- 只当在 event.target 是当前元素自身时触发处理函数 -->
+<!-- 即事件不是从内部元素触发的 -->
+<div v-on:click.self="doThat">...</div>
+
+```
+---
+
+# <font color = #42b983> 1.4 表单输入绑定</font>
+
+
+
+
