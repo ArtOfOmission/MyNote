@@ -474,6 +474,322 @@ var app = new Vue({
 
 # <font color = #42b983> 1.4 表单输入绑定</font>
 
+你可以用 v-model 指令在表单 ```<input>、<textarea> 及 <select> ``` 元素上创建双向数据绑定。它会根据控件类型自动选取正确的方法来更新元素。尽管有些神奇，但 v-model 本质上不过是语法糖。它负责监听用户的输入事件以更新数据，并对一些极端场景进行一些特殊处理。
+
+## 文本
+
+```html
+<input v-model="message" placeholder="edit me">
+<p>Message is: {{ message }}</p>
+```
+
+##  多行文本
+
+```html
+<span>Multiline message is:</span>
+<p style="white-space: pre-line;">{{ message }}</p>
+<br>
+<textarea v-model="message" placeholder="add multiple lines"></textarea>
+
+```
+
+## 多个复选框，绑定到同一个数组：
+
+```html
+<input type="checkbox" id="A" value="A" v-model="word_array">
+<label for="A">A</label>
+<input type="checkbox" id="B" value="B" v-model="word_array">
+<label for="B">B</label>
+<input type="checkbox" id="C" value="C" v-model="word_array">
+<label for="C">C</label>
+<input type="checkbox" id="D" value="D" v-model="word_array">
+<label for="D">D</label>
+<p>{{word_array}}</p>
+```
+
+## 单选按钮
+
+```html
+<input type="radio" id="man" name="sex" value="man" v-model="sex">
+<label for="man">man</label>
+<input type="radio" id="woman" name="sex" value="woman" v-model="sex">
+<label for="woman">woman</label>
+<br>
+<span>{{sex}}</span>
+```
+
+
+```js
+var app = new Vue({
+    el: "#app",
+    data: {
+        message: "hello",
+        isTrue: true,
+        word_array: [],
+        sex:"man",
+    }
+});
+```
+
+## 选择框
+
+```html
+<select v-model="selected">
+  <option disabled value="">请选择</option>
+  <option>A</option>
+  <option>B</option>
+  <option>C</option>
+</select>
+<span>Selected: {{ selected }}</span>
+```
+
+```js
+new Vue({
+  el: '...',
+  data: {
+    selected: ''
+  }
+})
+```
+
+## 用 v-for 渲染的动态选项：
+
+```html
+<select v-model="selected">
+  <option v-for="option in options" v-bind:value="option.value">
+    {{ option.text }}
+  </option>
+</select>
+<span>Selected: {{ selected }}</span>
+```
+
+```js
+new Vue({
+  el: '...',
+  data: {
+    selected: 'A',
+    options: [
+      { text: 'One', value: 'A' },
+      { text: 'Two', value: 'B' },
+      { text: 'Three', value: 'C' }
+    ]
+  }
+})
+```
+
+---
+# <font color = #42b983> 1.5 Class 与 Style 绑定</font>
+
+
+# 绑定 HTML Class
+
+## <font color = #42b983> 对象语法</font>
+
+
+我们可以传给 v-bind:class 一个对象，以动态地切换 class：
+
+```html
+<div v-bind:class="{ active: isActive }"></div>
+```
+
+你可以在对象中传入更多属性来动态切换多个 class。此外，v-bind:class 指令也可以与普通的 class 属性共存。当有如下模板:
+
+```html
+<div
+  class="static"
+  v-bind:class="{ active: isActive, 'text-danger': hasError }"
+></div>
+```
+
+```javascript
+data: {
+  isActive: true,
+  hasError: false
+}
+```
+
+结果渲染为：
+
+```html
 
 
 
+```
+
+
+绑定的数据对象不必内联定义在模板里：
+
+```html
+<div v-bind:class="classObject"></div>
+```
+
+```javascript
+data: {
+  classObject: {
+    active: true,
+    'text-danger': false
+  }
+}
+```
+
+我们也可以在这里绑定一个返回对象的计算属性。这是一个常用且强大的模式：
+
+```html
+<div v-bind:class="classObject"></div>
+```
+
+```javascript
+data: {
+  isActive: true,
+  error: null
+},
+computed: {
+  classObject: function () {
+    return {
+      active: this.isActive && !this.error,
+      'text-danger': this.error && this.error.type === 'fatal'
+    }
+  }
+}
+
+```
+
+## <font color = #42b983> 数组语法</font>
+
+我们可以把一个数组传给 v-bind:class，以应用一个 class 列表：
+
+```html
+<div v-bind:class="[activeClass, errorClass]"></div>
+```
+
+```javascript
+data: {
+  activeClass: 'active',
+  errorClass: 'text-danger'
+}
+```
+
+渲染结果：
+
+```html
+
+```
+
+使用三元表达式切换class：
+
+```html
+<div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>
+```
+
+不过，当有多个条件 class 时这样写有些繁琐。所以在数组语法中也可以使用对象语法：
+
+```html
+<div v-bind:class="[{ active: isActive }, errorClass]"></div>
+```
+
+
+# 绑定内联样式
+
+
+## 对象语法:
+
+v-bind:style 的对象语法十分直观——看着非常像 CSS，但其实是一个 JavaScript 对象。CSS 属性名可以用驼峰式 (camelCase) 或短横线分隔 (kebab-case，记得用引号括起来) 来命名：
+
+```html
+<div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }"></div>
+```
+
+```js
+data: {
+  activeColor: 'red',
+  fontSize: 30
+}
+```
+
+直接绑定到一个样式对象:
+
+```html
+<div v-bind:style="styleObject"></div>
+```
+
+```js
+data: {
+  styleObject: {
+    color: 'red',
+    fontSize: '13px'
+  }
+}
+```
+
+> 同样也可以用计算属性
+
+
+## 数组语法
+
+v-bind:style 的数组语法可以将多个样式对象应用到同一个元素上：
+
+```html
+<div v-bind:style="[baseStyles, overridingStyles]"></div>
+```
+---
+# <font color = #42b983>1.6 v-text与v-html </font>
+
+
+```html
+ <div id="app">
+    <!--使用v-text标签更友好，当js丢失或者因网速慢没有及时加载出来时，直接在页面显示{{....}}的问题-->
+    <span>{{message}}</span> = <span v-text="message"></span> <br/>
+    <!-- 需要注意的是：在生产环境中动态渲染HTML是非常危险的，因为容易导致XSS攻击。所以只能在可信的内容上使用v-html，永远不要在用户提交和可操作的网页上使用-->
+    <span v-html="todo"></span>
+    <br>
+    <p>“Mustache”语法：{{txthtml}}</p>
+    <p>v-html指令：<span v-html="txthtml"></span></p>
+</div>
+
+```
+
+```js
+var vue = new Vue({
+    el:'#app',
+    data:{
+        message:'Hello World!!!!!',
+        todo:'<h2>Hello World!</h2>',
+        txthtml:'<span style="color:red;">v-html显示</span>',
+    }
+});
+```
+
+
+# <font color = #42b983>1.7 v-pre & v-cloak & v-once 指令 </font>
+
+```html
+<div id="app">
+    <p> {{message}}</p>
+    <span>在模板中跳过vue的编译，直接输出原始值</span>
+    <p v-pre>
+        <!--在模板中跳过vue的编译，直接输出原始值-->
+        {{message}}
+    </p>
+    <span>v-cloak 这个指令是防止页面加载时(如网速缓慢。。。)出现 vuejs 的变量名而设计的</span>
+    <p v-cloak>
+        {{message}}
+    </p>
+    <span>在第一次DOM时进行渲染，且只会渲染一次</span>
+    <p v-once>
+        <!--在第一次DOM时进行渲染，且只会渲染一次-->
+        {{message}}
+    </p>
+</div>
+```
+
+```js
+
+var app = new Vue({
+    el: "#app",
+    data: {
+        message: "hi,wenyi!",
+    }
+
+});
+
+```
