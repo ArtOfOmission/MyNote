@@ -64,3 +64,11 @@ exec sp_rename '[原表名]','[新表名]'
 ```sql
 exec sp_rename '[表名].[列名]','[表名].[新列名]'
 ```
+
+12. 打开查询分析器的IO统计和时间统计：
+
+```sql
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+```
+
