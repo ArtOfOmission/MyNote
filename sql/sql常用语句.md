@@ -50,7 +50,7 @@ Alter table [表名] add constraint [约束名] foreign key(列名) referencese 
 9. 删除约束
 
 ```sql
-Alter table [表名] add constraint [约束名]
+Alter table [表名] drop constraint [约束名]
 ```
 
 10. 重命名表
