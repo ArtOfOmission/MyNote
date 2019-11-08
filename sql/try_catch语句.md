@@ -7,6 +7,7 @@ begin try
 
 end try
 begin catch
+    select '错误消息：' 
 	select ERROR_LINE() as errorLine;   --返回错误行数
 	select ERROR_MESSAGE() as errorMsg; --返回错误消息
 	select ERROR_NUMBER() as errorNum;  --返回错误号
