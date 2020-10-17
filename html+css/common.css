@@ -1,0 +1,26 @@
+body{
+    font-size:62.5% ;
+}
+
+
+/*
+
+*/
+.tab-yoo {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0px 0px 12px 0px #a2a9af;            
+}
+
+.tab-yoo tr th {
+    padding: 5px 10px 6px 10px;
+    box-shadow: 0px 0px 6px gainsboro;
+    background-color: #33cc99;
+    color: white; 
+}
+
+.tab-yoo tr td {
+    padding: 5px 10px 6px 10px;
+    box-shadow: inset 0px 1px 6px #dde0df;
+}
+
