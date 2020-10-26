@@ -1,7 +1,7 @@
 # .net
 
 1. C#7.0核心技术技术指南
-2. cli via C#
+2. clr via C#
 3. asp.net core3 框架揭秘
 4. C#多线程编程实战
 
